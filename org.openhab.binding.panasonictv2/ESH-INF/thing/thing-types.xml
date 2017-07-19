@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="panasonictv2"
+						  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+						  xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+						  xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+
+	<thing-type id="tv">
+		<label>Panasonic TV Binding Thing</label>
+		<description>Allows to control Panasonic TV</description>
+
+		<channels>
+			<channel id="power" typeId="power" />
+		</channels>
+		
+		<config-description>
+            <parameter name="hostName" type="text" required="true">
+                <label>Host name</label>
+                <description>Network address of the Panasonic TV.</description>
+            </parameter>
+            <parameter name="refreshInterval" type="integer" required="false">
+                <label>Refresh Interval</label>
+                <description>States how often a refresh shall occur in milliseconds.</description>
+                <default>1000</default>
+            </parameter>
+        </config-description>
+	</thing-type>
+
+    <channel-type id="power">
+        <item-type>Switch</item-type>
+        <label>Power</label>
+        <description>Power ON/OFF the Panasonic TV. Power ON needs specific TV configuration.</description>
+    </channel-type>
+</thing:thing-descriptions>
