@@ -31,7 +31,7 @@ public class PanasonicTV2BindingConstants {
     public static final String UPNP_XMLNS = "urn:panasonic-com:service:p00NetworkControl:1";
     public static final String UPNP_TYPE = "p00RemoteController";
     // SOAP actions
-    public static final String SOAP_URL = "http://%s/nrc/control_0/";
+    public static final String SOAP_URL = "http://%s:55000/nrc/control_0/";
     public static final String SOAP_SENDKEY = "\"urn:panasonic-com:service:p00NetworkControl:1#X_SendKey\"";
 
 }

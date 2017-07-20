@@ -1,10 +1,5 @@
 package org.openhab.binding.panasonictv2.internal.protocol;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -13,10 +8,14 @@ import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPBodyElement;
+import javax.xml.soap.SOAPConnection;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.openhab.binding.panasonictv2.PanasonicTV2BindingConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,22 +32,22 @@ import org.slf4j.LoggerFactory;
 
 public class PanasonicTV2Communication {
 
+    // Logging
     private final Logger logger = LoggerFactory.getLogger(PanasonicTV2Communication.class);
-
-    // The address of the receiver.
-    private final String host;
-
-    // SOAP Objects
+    // URL
     private URL url;
-    private SOAPMessage requestAction;
+    //
+    private MessageFactory messageFactory;
+    // The SOAP connection
+    private SOAPConnection soapConnection;
 
     public PanasonicTV2Communication(String host) {
-        this.host = host;
-
         try {
-            final MessageFactory messageFactory = MessageFactory.newInstance();
-            requestAction = messageFactory.createMessage();
-            this.url = new URL(String.format(PanasonicTV2BindingConstants.SOAP_URL, this.host));
+            messageFactory = MessageFactory.newInstance();
+
+            HttpClient client = new DefaultHttpClient();
+
+            this.url = new URL(String.format(PanasonicTV2BindingConstants.SOAP_URL, host));
         } catch (final SOAPException e) {
             logger.debug("Error creating SoapMessage", e);
         } catch (MalformedURLException e) {
@@ -58,14 +57,11 @@ public class PanasonicTV2Communication {
 
     public void sendKey(KeyCode keyCode) {
         try {
-            internalSendKey(keyCode);
-            postAndGetResponse(requestAction);
+            String response = internalSendKey(keyCode);
+            logger.debug("SOAP Response: " + response);
         } catch (SOAPException soape) {
             logger.error("Error creating SoapActionMessage", soape);
-        } catch (IOException ioe) {
-            logger.error("Error creating SoapActionMessage", ioe);
         }
-
     }
 
     /**
@@ -74,9 +70,9 @@ public class PanasonicTV2Communication {
      *
      * @throws SOAPException
      */
-    private void internalSendKey(KeyCode keyCode) throws SOAPException {
-        requestAction.getSOAPHeader().detachNode();
-        final SOAPBody soapBody = requestAction.getSOAPBody();
+    private String internalSendKey(KeyCode keyCode) throws SOAPException {
+        SOAPMessage requestAction = messageFactory.createMessage();
+        SOAPBody soapBody = requestAction.getSOAPBody();
         // <u:X_SendKey xmlns:u="urn:panasonic-com:service:p00NetworkControl:1">
         QName bodyName = new QName(PanasonicTV2BindingConstants.UPNP_XMLNS, "X_SendKey", "u");
         SOAPBodyElement bodyElement = soapBody.addBodyElement(bodyName);
@@ -90,40 +86,18 @@ public class PanasonicTV2Communication {
         headers.addHeader("SOAPAction", PanasonicTV2BindingConstants.SOAP_SENDKEY);
 
         requestAction.saveChanges();
-    }
 
-    private String postAndGetResponse(SOAPMessage message) throws IOException {
-        HttpURLConnection connection = null;
         try {
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "text/xml; charset=\"utf-8\"");
-            connection.setRequestProperty("SOAPAction", PanasonicTV2BindingConstants.SOAP_SENDKEY);
+            ByteArrayOutputStream out2 = new ByteArrayOutputStream();
+            requestAction.writeTo(out2);
+            logger.debug("SOAP Request: " + new String(out2.toByteArray()));
 
-            connection.setUseCaches(false);
-            connection.setDoInput(true);
-            connection.setDoOutput(true);
-
-            // Send request
-            message.writeTo(connection.getOutputStream());
-
-            // Read response
-            InputStream is = connection.getInputStream();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-            String line;
-            StringBuilder response = new StringBuilder();
-            while ((line = rd.readLine()) != null) {
-                response.append(line);
-                response.append('\r');
-            }
-            rd.close();
-            return response.toString();
+            SOAPMessage soapResponse = soapConnection.call(requestAction, url);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            soapResponse.writeTo(out);
+            return out.toString();
         } catch (Exception e) {
-            logger.error("Could not handle http post: ", e);
-        } finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
+            logger.error("Error performing the SOAP Call: ", e);
         }
         return "";
     }
