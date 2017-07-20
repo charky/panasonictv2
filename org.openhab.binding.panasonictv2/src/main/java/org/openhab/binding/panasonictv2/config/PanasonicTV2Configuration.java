@@ -13,7 +13,7 @@ package org.openhab.binding.panasonictv2.config;
  *
  * @author Charky - Initial contribution
  */
-public class PanasonicTvConfiguration {
+public class PanasonicTV2Configuration {
     public static final String HOST_NAME = "hostName";
     public static final String PORT = "port";
     public static final String REFRESH_INTERVAL = "refreshInterval";

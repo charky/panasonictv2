@@ -20,7 +20,7 @@ import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.jupnp.model.meta.RemoteDevice;
 import org.openhab.binding.panasonictv2.PanasonicTV2BindingConstants;
-import org.openhab.binding.panasonictv2.config.PanasonicTvConfiguration;
+import org.openhab.binding.panasonictv2.config.PanasonicTV2Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +50,7 @@ public class PanasonicTV2DiscoveryParticipant implements UpnpDiscoveryParticipan
             } catch (Exception e) {
                 // ignore and use the default label
             }
-            properties.put(PanasonicTvConfiguration.HOST_NAME, device.getIdentity().getDescriptorURL().getHost());
+            properties.put(PanasonicTV2Configuration.HOST_NAME, device.getIdentity().getDescriptorURL().getHost());
 
             DiscoveryResult result = DiscoveryResultBuilder.create(uid).withProperties(properties).withLabel(label)
                     .build();
@@ -81,7 +81,7 @@ public class PanasonicTV2DiscoveryParticipant implements UpnpDiscoveryParticipan
         // UDN shouldn't contain '-' characters.
         String udn = device.getIdentity().getUdn().getIdentifierString().replace("-", "_");
 
-        if (manufacturer.toUpperCase().contains(PanasonicTV2BindingConstants.UPNP_MANUFACTURER)
+        if (manufacturer.toUpperCase().contains(PanasonicTV2BindingConstants.UPNP_MANUFACTURER.toUpperCase())
                 && device.getType().getType().equals(PanasonicTV2BindingConstants.UPNP_TYPE)) {
 
             logger.debug("Discovered a Panasonic TV '{}' model '{}' thing with UDN '{}'", friedlyName, modelName, udn);

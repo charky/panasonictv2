@@ -5,8 +5,8 @@
 						  xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
 
 
-	<thing-type id="tv">
-		<label>Panasonic TV Binding Thing</label>
+	<thing-type id="panasonictv">
+		<label>Panasonic TV Binding</label>
 		<description>Allows to control Panasonic TV</description>
 
 		<channels>
