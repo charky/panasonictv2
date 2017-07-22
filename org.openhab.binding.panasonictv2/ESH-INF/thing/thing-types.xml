@@ -11,6 +11,7 @@
 
 		<channels>
 			<channel id="power" typeId="power" />
+			<channel id="mute" typeId="mute" />
 		</channels>
 		
 		<config-description>
@@ -20,8 +21,8 @@
             </parameter>
             <parameter name="refreshInterval" type="integer" required="false">
                 <label>Refresh Interval</label>
-                <description>States how often a refresh shall occur in milliseconds.</description>
-                <default>1000</default>
+                <description>States how often a refresh shall occur in Seconds.</description>
+                <default>30</default>
             </parameter>
         </config-description>
 	</thing-type>
@@ -30,5 +31,10 @@
         <item-type>Switch</item-type>
         <label>Power</label>
         <description>Power ON/OFF the Panasonic TV. Power ON needs specific TV configuration.</description>
+    </channel-type>
+    <channel-type id="mute">
+        <item-type>Switch</item-type>
+        <label>Mute</label>
+        <description>Mute Toggle the Panasonic TV.</description>
     </channel-type>
 </thing:thing-descriptions>

@@ -10,12 +10,19 @@ Import-Package:
  org.apache.commons.io.output;version="2.2.0",
  org.eclipse.smarthome.config.core,
  org.eclipse.smarthome.core.common.registry,
+ org.eclipse.smarthome.config.discovery,
  org.eclipse.smarthome.core.library.types,
  org.eclipse.smarthome.core.thing,
  org.eclipse.smarthome.core.thing.binding,
  org.eclipse.smarthome.core.thing.binding.builder,
  org.eclipse.smarthome.core.thing.type,
  org.eclipse.smarthome.core.types,
+ org.jupnp,
+ org.jupnp.binding.xml,
+ org.jupnp.controlpoint,
+ org.jupnp.model.meta,
+ org.jupnp.model.types,
+ org.jupnp.registry,
  org.eclipse.smarthome.io.transport.upnp,
  org.openhab.binding.panasonictv2,
  org.openhab.binding.panasonictv2.handler,
@@ -23,7 +30,3 @@ Import-Package:
 Service-Component: OSGI-INF/*.xml
 Export-Package: org.openhab.binding.panasonictv2,
  org.openhab.binding.panasonictv2.handler
-Require-Bundle: org.jupnp,
- org.eclipse.smarthome.config.discovery,
- org.apache.httpcomponents.httpclient,
- org.apache.commons.httpclient

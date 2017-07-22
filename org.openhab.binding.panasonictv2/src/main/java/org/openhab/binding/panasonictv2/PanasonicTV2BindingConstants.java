@@ -25,6 +25,7 @@ public class PanasonicTV2BindingConstants {
 
     // List of all Channel ids
     public static final String CHANNEL_POWER = "power";
+    public static final String CHANNEL_MUTE = "mute";
 
     // Additional Finals
     public static final String UPNP_MANUFACTURER = "Panasonic";
