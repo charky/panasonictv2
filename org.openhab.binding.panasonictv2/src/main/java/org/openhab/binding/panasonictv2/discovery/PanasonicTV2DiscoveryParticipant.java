@@ -82,7 +82,8 @@ public class PanasonicTV2DiscoveryParticipant implements UpnpDiscoveryParticipan
         String udn = device.getIdentity().getUdn().getIdentifierString().replace("-", "_");
 
         if (manufacturer.toUpperCase().contains(PanasonicTV2BindingConstants.UPNP_MANUFACTURER.toUpperCase())
-                && device.getType().getType().equals(PanasonicTV2BindingConstants.UPNP_TYPE)) {
+                && device.getType().getType().equals("MediaRenderer")) {
+            // && device.getType().getType().equals(PanasonicTV2BindingConstants.UPNP_TYPE)) {
 
             logger.debug("Discovered a Panasonic TV '{}' model '{}' thing with UDN '{}'", friedlyName, modelName, udn);
 
